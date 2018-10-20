@@ -1,4 +1,4 @@
-import sys, getopt
+import os, sys, getopt
 import timing
 from PIL import Image
 
@@ -65,13 +65,13 @@ def iterate_all_rules(width, steps):
 
 def print_help():
 	print("This script simulates elementary (1 dimensional) cellular automata.")
-	print("-r specifies a rule number.  Interesting rules can be found at https://en.wikipedia.org/wiki/Elementary_cellular_automaton")
-	print("-w specifies a simulation width, and automatically sets steps to width / 2.")
-	print("-s overrides default step length")
-	print("-i sets to 'iterate mode'.  This iterates and saves-to-image all 256 rules.")
+	print("\t-r specifies a rule number.  Interesting rules can be found at https://en.wikipedia.org/wiki/Elementary_cellular_automaton")
+	print("\t-w specifies a simulation width, and automatically sets steps to width / 2.")
+	print("\t-s overrides default step length")
+	print("\t-i sets to 'iterate mode'.  This iterates and saves-to-image all 256 rules.")
 	print("\nSome examples:")
-	print("pyramid.py -i (iterate all rules) -w <width>")
-	print("pyramid.py -r <rule # (integer)> -w <width> -s <steps>")
+	print("\tpyramid.py -i (iterate all rules) -w <width>")
+	print("\tpyramid.py -r <rule # (integer)> -w <width> -s <steps>")
 
 
 def save2image(ptr, rules):
@@ -85,6 +85,12 @@ def save2image(ptr, rules):
 	path = "images/"
 	name = "pyramid_{}x{}_{}".format(len(ptr[0]),len(ptr), rule)
 	ext = ".jpeg"
+
+	try:
+	    os.stat(path)
+	except:
+	    os.mkdir(path)
+
 	im.save(path+name+ext)
 
 
@@ -118,9 +124,9 @@ def implement_rules(data, rules, steps):
 	""" x will be replaced by rules[hex2int('101')] """
 
 	width = len(data[0])
-	for row in xrange(steps):
+	for row in range(steps):
 		newRow = []
-		for col in xrange(width):
+		for col in range(width):
 			indices = [[row,col+x] for x in range(-1,2)]
 			rule = map(data[row], indices)
 			newRow.append(rules[rule])
